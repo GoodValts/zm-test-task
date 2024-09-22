@@ -2,4 +2,4 @@
 
 Test task includes:
 
-- [interview task]() _done 22.09.2024_
+- [interview task](https://github.com/GoodValts/zm-test-task/blob/main/interview-task.js) _done 22.09.2024_
