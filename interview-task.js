@@ -1,4 +1,3 @@
-
 class Position {
   constructor(x, y) {
     this.x = x;
@@ -24,47 +23,19 @@ class Thing {
 }
 
 class LevelMap {
-  /**
-   *
-   * @param {Object[]} things
-   */
   constructor(things) {
-    // вычисляем ширину и высоту поля
-    // координаты начинаются с 0 (левый нижний угол!!!)
     this._columns = Math.max(...things.map((thing) => thing.x)) + 1;
     this._rows = Math.max(...things.map((thing) => thing.y)) + 1;
-
-    this.field = [];
-
-    for (let y = 0; y < this._columns; y += 1) {
-      const row = [];
-      for (let x = 0; x < this._rows; x += 1) {
-        row.push(null);
-      }
-      this.field.push(row);
-    }
+    
+    this.field = Array.from({length: this._columns}, () => Array(this._rows).fill(null));
 
     things.forEach(
       (el) =>
         (this.field[el.y][el.x] = new Thing({ x: el.x, y: el.y }, el.number))
     );
-
-    // Создаем двумерный массив this.field и заполняем его things.
-    // в конструкции this.field[y][x] y - первая координата, это индекс строки, а x - индекс столбца
-    // Если по координате не лежит переданный thing, то там null!
   }
 
-  /**
-   * Возвращает true если эти 2 финга можно соединить.
-   * Выходить за пределы поля НЕЛЬЗЯ!
-   * @param thing1
-   * @param thing2
-   * @returns {boolean}
-   */
   canConnect(thing1, thing2) {
-    console.log("thing1=", thing1);
-    console.log("thing2=", thing2);
-
     if (thing1 === null || thing2 === null) return false;
 
     const neighbors = new Set();
@@ -78,23 +49,22 @@ class LevelMap {
     ];
 
     const queue = [thing1.position];
-    let cnt = 0;
 
     while (queue.length) {
       const nodePosition = queue.shift();
 
       if (!visited.has(nodePosition.stringify)) {
-        cnt++;
         visited.add(nodePosition.stringify);
 
         for (let delta of deltaArr) {
           const newY = nodePosition.y + delta.y;
           const newX = nodePosition.x + delta.x;
+          
           if (this.field[newY] && this.field[newY][newX] !== undefined) {
             if (this.field[newY][newX]) {
-              neighbors.add(this.field[newY][newX]);
+              neighbors.add(this.field[newY][newX].position.stringify);
 
-              if (neighbors.has(thing2)) {
+              if (neighbors.has(thing2.position.stringify)) {
                 return true;
               }
             } else {
@@ -144,17 +114,4 @@ const levelMap = new LevelMap([
 
 levelMap.print();
 
-console.log(levelMap.canConnect(levelMap.field[4][5], levelMap.field[3][6]));
-/*
-
-9
-
-■■■3985
-■■■4871
-■■56967
-■■23■■4
-■■12■■■
-■■■■■■■
-■■■■■■■
-
-*/
+console.log(levelMap.canConnect(levelMap.field[6][4], levelMap.field[3][6]));
