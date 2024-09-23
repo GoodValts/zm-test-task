@@ -3,3 +3,4 @@
 Test task includes:
 
 - [interview task](https://github.com/GoodValts/zm-test-task/blob/main/interview-task.js) _done 22.09.2024_
+- [game](https://github.com/GoodValts/zm-test-task/blob/main/game): [deploy](https://goodvalts.github.io/zm-test-task/game/) _done 23.09.2024_
